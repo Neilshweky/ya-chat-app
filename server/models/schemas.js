@@ -15,17 +15,22 @@ const trim = str => str.trim();
 
 
 const User = new Schema({
-  username: { type: String, required: true, set: trim },
+  username: { type: String, required: true, set: trim, unique: true },
   password: { type: String, required: true },
   firstName: { type: String, required: true, set: trim },
   lastName: { type: String, required: true, set: trim },
-  email: { type: String, required: true, set: trim },
+  email: { type: String, required: true, set: trim, unique: true },
   chats: Array
 })
 
 const Chat = new Schema({
   members: Array,
-  messages: Array
+  lastUsed: Number,
+  messages: [{
+    message: String,
+    sender: String,
+    timestamp: Number 
+  }]
 })
 
-module.exports = { User: mongoose.model('User', User) };
+module.exports = { User: mongoose.model('User', User), Chat: mongoose.model('Chat', Chat) };

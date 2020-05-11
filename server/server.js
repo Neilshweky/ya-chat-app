@@ -42,7 +42,11 @@ app.get('/', (req, res) => res.send('Hello, World'))
 // })
 
 app.post('/logout', routes.logout)
-app.get('/getchats', routes.get_chats)
+app.get('/getchats/:username', routes.get_chats)
+app.get('/getchat', routes.get_chat)
+app.post('/createchat', routes.create_chat);
+app.post('/sendmessage', routes.send_message);
+
 
 
 console.log('Authors: Neil Shweky (nshweky)');

@@ -50,13 +50,12 @@ export default function SignIn(props) {
       credentials: 'same-origin'
     }).then(async res => {
       if (!res.ok) {
-        
         throw new Error((await res.json()).message)
       } else {
         return res.json()
       }
     }).then(res => {
-        window.localStorage.setItem('_id', res.data._id)
+        window.localStorage.setItem('username', res.data.username)
         history.push('/')
     })
     .catch(err => {

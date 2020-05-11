@@ -1,6 +1,6 @@
 const SHA256 = require('crypto-js/sha256');
 const Schemas = require('./schemas.js');
-
+const moment = require('moment')
 
 const createUser = async function(profile) {
   profile.password = SHA256(profile.password);
@@ -25,13 +25,47 @@ const login = async function(username, password) {
   return user;
 }
 
-const getChats = function(_id) {
-  return Promise.resolve([])
+const getChats = function(username) {
+  return Schemas.Chat.find( { members : { $elemMatch: { username } } } )
 } 
+
+const getChat = function(_id) {
+  return Schemas.Chat.find( { _id }, { messages : { $slice: -20 } } )
+}
+
+const createChat = async function(usernames) {
+  let users = await Schemas.User.find( 
+    { username: { $in : usernames } }, 
+    { firstName: 1, lastName: 1, username: 1 } 
+  )
+  console.log("USERS", users)
+  if (users.length !== usernames.length) throw Error('Invalid usernames.')
+  const chatObj = {
+    members: users,
+    lastUsed: moment().unix()
+  }
+  const chat = new Schemas.Chat(chatObj);
+  return chat.save();
+}
+const sendMessage = function(chatID, sender, message) {
+  const messageObj = {
+    message,
+    sender,
+    timestamp: moment().unix()
+  }
+  console.log(chatID)
+  return Schemas.Chat.updateOne(
+    { _id: chatID },
+    { $push: { messages: messageObj } }
+  )
+}
 
 module.exports = { 
   createUser, 
   getUser,
   login,
-  getChats
+  getChat,
+  getChats,
+  createChat,
+  sendMessage
 }

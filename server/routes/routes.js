@@ -5,10 +5,11 @@ const errorMessageForError = err => {
   if (err instanceof Error) {
     if (!!err.code) {
       const codes = {
+        11000: "there is already an account with this username."
       }
       return codes[`${err.code}`] || err
     } else {
-      console.log("HERE", err.message)
+      console.log("HERE!!!", err.message)
       return err.message 
     }
   } else return err
@@ -59,14 +60,52 @@ const logout = function(req, res) {
 
 
 const get_chats = function(req, res) {
-  db.getChats(req.session._id)
+  if (!req.params.username) {
+    res.status(400).send('please enter username');
+    return
+  }
+  db.getChats(req.params.username)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(errorMessageForError(err)))
 }
+
+const get_chat = function(req, res) {
+  if (!req.query._id) {
+    res.status(400).send('please enter _id');
+    return
+  }
+  db.getChat(req.query._id)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(errorMessageForError(err)))
+}
+
+const create_chat = function(req, res) {
+  if (!req.body.usernames || req.body.usernames.length === 0) {
+    res.status(400).send('please enter usernames');
+    return
+  }
+  db.createChat(req.body.usernames)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(errorMessageForError(err)))
+}
+
+const send_message = function(req, res) {
+  if (!req.body.chatID || !req.body.sender || !req.body.message) {
+    res.status(400).send('please enter chat id, sender, message');
+    return
+  }
+  db.sendMessage(req.body.chatID, req.body.sender, req.body.message)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(errorMessageForError(err)))
+}
+
 
 module.exports = {
   signup,
   login,
   logout,
-  get_chats
+  get_chats,
+  create_chat,
+  send_message,
+  get_chat
 }

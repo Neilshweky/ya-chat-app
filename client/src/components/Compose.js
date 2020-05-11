@@ -1,5 +1,6 @@
 import React from 'react';
 import '../style/Compose.css';
+import MdSend from 'react-ionicons/lib/MdSend'
 
 export default function Compose(props) {
     return (
@@ -8,11 +9,16 @@ export default function Compose(props) {
           type="text"
           className="compose-input"
           placeholder="Type a message, @name"
+          size="60"
         />
+      <MdSend 
+          key="info" 
+          className="toolbar-button" 
+          fontSize="28px" 
+          color="#007aff" 
+          onClick={() => { console.log("sending message...") }}/>
 
-        {
-          props.rightItems
-        }
+      
       </div>
     );
 }

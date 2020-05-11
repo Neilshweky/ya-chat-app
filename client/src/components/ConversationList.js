@@ -2,7 +2,6 @@ import React from 'react';
 // import ConversationSearch from '../ConversationSearch';
 import ConversationListItem from './ConversationListItem';
 import Toolbar from './Toolbar';
-import ToolbarButton from './ToolbarButton';
 import IosCog from 'react-ionicons/lib/IosCog'
 import IosAddCircleOutline from 'react-ionicons/lib/IosAddCircleOutline'
 
@@ -70,6 +69,7 @@ export default class ConversationList extends React.Component {
             <ConversationListItem
               key={conversation._id + ' ' + i}
               data={conversation}
+              setChat={this.props.setChat}
             />
           )
         }

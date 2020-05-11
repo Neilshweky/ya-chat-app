@@ -5,7 +5,7 @@
   background: white;
   border-top: 1px solid #eeeef1;
   position: fixed;
-  width: calc(100% - 20px);
+  /* width: calc(100%-20px); */
   bottom: 0px;
 }
 
@@ -26,14 +26,31 @@
 }
 
 .compose-input::placeholder {
-  opacity: 0.3;
+  opacity: 1.0;
+  color: darkgray;
 }
 
 .compose .toolbar-button {
-  color: #bbbbbf;
+  color:black;
   margin-left: 15px;
 }
 
 .compose .toolbar-button:hover {
-  color: #99999c;
+  color: black;
+}
+
+.toolbar-button {
+  color: #007aff;
+  font-size: 28px;
+  transition: all 0.1s;
+}
+
+.toolbar-button:hover {
+  cursor: pointer;
+  color: #0063ce;
+}
+
+.toolbar-button:active {
+  color: #007aff;
+  opacity: 0.25;
 }

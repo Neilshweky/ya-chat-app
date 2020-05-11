@@ -8,12 +8,15 @@ export default function ConversationListItem(props) {
     shave('.conversation-snippet', 20);
   })
 
+    let setChat = () => {
+      props.setChat(props.data._id)
+    }
     // const { photo, name, text } = props.data;
     let name = props.data.members.reduce((acc, m) => 
                   acc + m.firstName + " " + m.lastName, "")
     let text = "This is a most recent message hellooo there"
     return (
-      <div className="conversation-list-item">
+      <div className="conversation-list-item" onClick={setChat}>
         <img className="conversation-photo" src={"https://www.hockeydb.com/ihdb/photos/tony-deangelo-2019-48.jpg"} alt="conversation" />
         <div className="conversation-info">
           <h1 className="conversation-title">{ name }</h1>

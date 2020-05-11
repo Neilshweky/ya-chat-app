@@ -13,9 +13,10 @@ export default class Main extends React.Component {
 
     // The state maintained by this React Component.
     this.state = {
+      activeChat: ""
     }
 
-    // this.showMovies = this.showMovies.bind(this);
+    this.setActiveChat = this.setActiveChat.bind(this);
   }
 
   checkError(res) {
@@ -31,7 +32,7 @@ export default class Main extends React.Component {
   componentDidMount() {
     const { history } = this.props;
 
-    if (!window.localStorage.getItem('_id')) {
+    if (!window.localStorage.getItem('username')) {
       history.push('/login')
       console.log("NEEDS AUTH")
       return
@@ -46,34 +47,20 @@ export default class Main extends React.Component {
       })
   }
 
+  setActiveChat(_id) {
+    console.log("_id: ", _id)
+    this.setState({ activeChat: _id })
+  }
+
   render() { 
     return (
       <div className="messenger">
-        {/* <Toolbar
-          title="Messenger"
-          leftItems={[
-            <ToolbarButton key="cog" icon="ion-ios-cog" />
-          ]}
-          rightItems={[
-            <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
-          ]}
-        /> */}
-
-        {/* <Toolbar
-          title="Conversation Title"
-          rightItems={[
-            <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
-            <ToolbarButton key="video" icon="ion-ios-videocam" />,
-            <ToolbarButton key="phone" icon="ion-ios-call" />
-          ]}
-        /> */}
-
         <div className="scrollable sidebar">
-          <ConversationList />
+          <ConversationList setChat={this.setActiveChat} />
         </div>
 
         <div className="scrollable content">
-          <MessageList />
+          <MessageList activeChat={this.state.activeChat}/>
         </div>
       </div>
     );

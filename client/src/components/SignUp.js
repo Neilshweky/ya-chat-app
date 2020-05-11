@@ -48,14 +48,17 @@ export default function SignUp(props) {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => {
-      console.log(res.status, res.statusText, res.json())
+    }).then(async res => {
       if (!res.ok) {
-        throw new Error(res.statusText)
+        throw new Error((await res.json()).message)
       } else {
         history.push('/')
       }
-    }).catch(console.log)
+    }).catch(err => {
+      console.log(err)
+      document.getElementById("error").innerHTML = err
+
+    })
   }
 
   return (
@@ -141,6 +144,8 @@ export default function SignUp(props) {
             </Grid>
           </Grid>
         </form>
+        <p style={{color:"red"}} id="error"></p>
+
       </div>
     </Container>
   );
