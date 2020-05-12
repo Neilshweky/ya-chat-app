@@ -26,11 +26,12 @@ const login = async function(username, password) {
 }
 
 const getChats = function(username) {
-  return Schemas.Chat.find( { members : { $elemMatch: { username } } } )
+  return Schemas.Chat.find( { members : { $elemMatch: { username } } }, { messages : { $slice: -1 } } )
+                     .sort( { lastUsed: -1 } )
 } 
 
 const getChat = function(_id) {
-  return Schemas.Chat.find( { _id }, { messages : { $slice: -20 } } )
+  return Schemas.Chat.findOne( { _id }, { messages : { $slice: -20 } } )
 }
 
 const createChat = async function(usernames) {
@@ -56,8 +57,8 @@ const sendMessage = function(chatID, sender, message) {
   console.log(chatID)
   return Schemas.Chat.updateOne(
     { _id: chatID },
-    { $push: { messages: messageObj } }
-  )
+    { $push: { messages: messageObj }, lastUsed: moment().unix() }
+  ).then(() => messageObj)
 }
 
 module.exports = { 

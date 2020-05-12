@@ -19,8 +19,7 @@ const User = new Schema({
   password: { type: String, required: true },
   firstName: { type: String, required: true, set: trim },
   lastName: { type: String, required: true, set: trim },
-  email: { type: String, required: true, set: trim, unique: true },
-  chats: Array
+  email: { type: String, required: true, set: trim, unique: true }
 })
 
 const Chat = new Schema({

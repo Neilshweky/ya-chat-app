@@ -10,9 +10,9 @@ const errorMessageForError = err => {
       return codes[`${err.code}`] || err
     } else {
       console.log("HERE!!!", err.message)
-      return err.message 
+      return { message: err.message }
     }
-  } else return err
+  } else return { message: err }
 }
 
 
@@ -33,13 +33,12 @@ const signup = (req, res) => {
       .then((data) => 
         res.status(201).send({ message: `${data.username} is now logged in.`, data })
       )
-      .catch(err => res.status(500).send({ message: errorMessageForError(err) }));
+      .catch(err => res.status(500).send(errorMessageForError(err)));
   }
 };
 
 // Route for '/login', checks correct authentication
 const login = (req, res) => {  
-  console.log(req.session.user)
   if (!req.body.username || !req.body.password) {
     res.status(400).send('please enter username and password to log in.');
   } else {
@@ -53,8 +52,6 @@ const login = (req, res) => {
 };
 
 const logout = function(req, res) {
-  const username = req.session.user.username;
-  req.session.user = null
   res.status(200).send({ message: `${username} was logged out`})
 }
 
@@ -80,8 +77,9 @@ const get_chat = function(req, res) {
 }
 
 const create_chat = function(req, res) {
-  if (!req.body.usernames || req.body.usernames.length === 0) {
-    res.status(400).send('please enter usernames');
+  console.log(req.body.usernames)
+  if (!req.body.usernames || req.body.usernames.length <= 1) {
+    res.status(400).send('please enter more than one username');
     return
   }
   db.createChat(req.body.usernames)
@@ -91,6 +89,7 @@ const create_chat = function(req, res) {
 
 const send_message = function(req, res) {
   if (!req.body.chatID || !req.body.sender || !req.body.message) {
+    console.log("hello", req.body)
     res.status(400).send('please enter chat id, sender, message');
     return
   }

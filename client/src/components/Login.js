@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { API_URL } from './Utilities';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,13 +42,12 @@ export default function SignIn(props) {
     const { history } = props;
     let params = ['username', 'password']
     let body = params.reduce((acc, p) => { acc[p] = document.getElementById(p).value; return acc }, {})
-    fetch('http://localhost:8080/login', {
+    fetch(API_URL + '/login', {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json'
-      },
-      credentials: 'same-origin'
+      }
     }).then(async res => {
       if (!res.ok) {
         throw new Error((await res.json()).message)

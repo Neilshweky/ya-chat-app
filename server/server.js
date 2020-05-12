@@ -51,6 +51,52 @@ app.post('/sendmessage', routes.send_message);
 
 console.log('Authors: Neil Shweky (nshweky)');
 const port = process.env.PORT || '8080';
-app.listen(port, () => {
+let server = app.listen(port, () => {
   console.log('Server running on port ' + port + '. Now open http://localhost:' + port + '/ in your browser!');
+});
+
+var socket = require('socket.io');
+var io = socket(server);
+io.on('connection', function(socket){
+    console.log('connected');
+    console.log('%s sockets connected', io.engine.clientsCount);
+
+    socket.on('login', username => {
+      console.log('logging in')
+      socket.join(username)
+    })
+
+    socket.on('new chat', function(chat) {
+      console.log('creating new chat...')
+      chat.members.forEach(member => {
+        io.to(member.username).emit('new chat', chat)
+      });
+    })
+
+    socket.on('join chat', function(room) {
+      console.log('joining chat!');
+      socket.join(room);
+    })
+
+    socket.on('leave chat', function(room) {
+      console.log('leaving chat!');
+      socket.leave(room);
+    })
+
+    socket.on('chat message', function(data){
+      let room = data._id
+      delete data._id
+      console.log('chat message')
+      io.to(room).emit('chat message', data);   
+    });
+
+    socket.on('typing', function(data) {
+      console.log('typing')
+      socket.broadcast.to(data.room).emit('typing', data.username);
+    })
+
+    socket.on('empty', function(data) {
+      console.log('empty')
+      socket.broadcast.to(data.room).emit('empty', data);
+    })
 });
