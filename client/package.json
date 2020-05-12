@@ -16,12 +16,14 @@
     "react-ionicons": "^3.1.4",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "serve": "^11.3.0",
     "shave": "^2.5.9",
     "socket.io-client": "^2.3.0",
     "text-ellipsis": "^1.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
