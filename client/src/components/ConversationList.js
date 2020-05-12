@@ -28,13 +28,17 @@ export default class ConversationList extends React.Component {
         (previousProps.chats.length !== 0 && 
         (previousProps.chats[0]._id !== this.props.chats[0]._id))) {
       console.log('updating chat state', this.state.chats)
-      this.setState({ chats: this.props.chats })
+      if (Array.isArray(this.props.chats))
+        this.setState({ chats: this.props.chats })
     }
     if (!previousProps.socket && this.props.socket) {
       this.props.socket.on('chat message', message => {
         let chats = this.state.chats;
-        chats[0].messages = [message]
-        this.setState({ chats })
+        if (chats.length >= 1) {
+          chats[0].messages = [message]
+          this.setState({ chats })
+        }
+
       })
     }
   }

@@ -69,10 +69,10 @@ export default class MessageList extends React.Component {
     }
   }
 
-  logout() {
-    // const { history } = this.props
-    // window.localStorage.removeItem('username')
-    // history.push('/login')
+  logout = () => {
+    const { history } = this.props
+    window.localStorage.removeItem('username')
+    history.push('/login')
   }
        
   renderMessages = () => {
