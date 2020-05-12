@@ -1,6 +1,6 @@
 # ya-chat-app
 
-The link to the website: https://ya-chat-app.herokuapp.com
+The link to the website: https://ya-chat-app.herokuapp.com   
 The link to the server: https://ya-chat-app-server.herokuapp.com
 
 You might have to wake them both up for the site to work.
