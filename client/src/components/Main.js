@@ -18,7 +18,8 @@ export default class Main extends React.Component {
     // The state maintained by this React Component.
     this.state = {
       activeChat: {},
-      socket: null
+      socket: null,
+      chats: []
     }
 
     this.setActiveChat = this.setActiveChat.bind(this);
