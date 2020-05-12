@@ -39,6 +39,7 @@ export default class Main extends React.Component {
     const socket = socketIOClient(API_URL);
     socket.emit('login', username)
     this.setState({ socket })
+    this.state.chats.forEach(chat => socket.emit('join chat', chat._id))
 
     socket.on('new chat', chat => {
       let chats = this.state.chats  
@@ -54,14 +55,16 @@ export default class Main extends React.Component {
       .then(chats => {
         this.setActiveChat(chats[0]._id)
         this.setState({ chats });
+
       })
       .catch(console.log)
   }
 
-  moveChatToFront = _id => {
+  moveChatToFront = (_id, message=null) => {
     console.log("movings chat up...", _id)
     let chats = this.state.chats;
     let chat = chats.find(chat => chat._id === _id)
+    if (message) chat.messages = [message]
     if(chat) {
       chats = chats.filter(chat => chat._id !== _id)
       chats.unshift(chat)
@@ -75,9 +78,8 @@ export default class Main extends React.Component {
     fetch(API_URL + "/getchat?_id="+_id)
       .then(checkError)
       .then(chat => {
-        if (this.state.activeChat._id) 
-          this.state.socket.emit('leave chat', this.state.activeChat._id)
-        this.state.socket.emit('join chat', _id)
+        // if (this.state.activeChat._id) 
+        //   this.state.socket.emit('leave chat', this.state.activeChat._id)
         this.setState({ activeChat: chat })
       })
       .catch(console.log)

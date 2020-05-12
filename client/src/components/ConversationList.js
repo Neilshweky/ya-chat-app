@@ -32,7 +32,8 @@ export default class ConversationList extends React.Component {
         this.setState({ chats: this.props.chats })
     }
     if (!previousProps.socket && this.props.socket) {
-      this.props.socket.on('chat message', message => {
+      this.props.socket.on('chat message', data => {
+        let message = data.message
         let chats = this.state.chats;
         if (chats.length >= 1) {
           chats[0].messages = [message]

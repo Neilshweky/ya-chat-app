@@ -10,7 +10,6 @@ export default function ConversationListItem(props) {
   }
   // const { photo, name, text } = props.data;
   let username = window.localStorage.getItem('username')
-  console.log(props.data.members)
   let name = props.data.members.reduce((acc, m) => 
                 acc + 
                 (username === m.username ? "" : m.firstName + " " + m.lastName + ", "), ""

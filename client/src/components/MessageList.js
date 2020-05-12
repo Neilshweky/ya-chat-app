@@ -49,25 +49,36 @@ export default class MessageList extends React.Component {
     }
 
     if (!previousProps.socket && this.props.socket) {
-      this.props.socket.on('chat message', message => {
-        let messages = this.state.messages;
-        messages.push(message)
-        this.setState({ messages })
-        this.renderMessages()
-        document.getElementById("mcontainer").scrollIntoView(false);
+      this.props.socket.on('chat message', data => {
+        console.log(this.props.activeChat._id === data._id)
+        let message = data.message
+        if (this.props.activeChat._id === data._id) {
+          let messages = this.state.messages;
+          messages.push(message)
+          this.setState({ messages })
+          this.renderMessages()
+          document.getElementById("mcontainer").scrollIntoView(false);
+        } else {
+          this.props.moveChat(data._id, message)
+        }
+        
       })
 
-      this.props.socket.on('typing', username => {
-        
-        console.log('typing!')
-        let name = this.state.name.split(' - ')[0] + " - " + username + " is typing..."
-        this.setState({ name })
+      this.props.socket.on('typing', data => {
+        let { room, username } = data
+        console.log('typing!', data)
+        if (this.props.activeChat._id === room) {
+          let name = this.state.name.split(' - ')[0] + " - " + username + " is typing..."
+          this.setState({ name })
+        }
       })
-      this.props.socket.on('empty', () => {
+      this.props.socket.on('empty', room => {
       
         console.log('empty!')
-        let name = this.state.name.split(' - ')[0]
-        this.setState({ name })
+        if (this.props.activeChat._id === room) {
+          let name = this.state.name.split(' - ')[0]
+          this.setState({ name })
+        }
       })
     }
   }
