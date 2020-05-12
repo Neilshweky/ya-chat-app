@@ -64,8 +64,8 @@ export default class Main extends React.Component {
     console.log("movings chat up...", _id)
     let chats = this.state.chats;
     let chat = chats.find(chat => chat._id === _id)
-    if (message) chat.messages = [message]
     if(chat) {
+      if (message && chat.messages) chat.messages = [message]
       chats = chats.filter(chat => chat._id !== _id)
       chats.unshift(chat)
       this.setState({ chats })

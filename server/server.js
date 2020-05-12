@@ -87,16 +87,16 @@ io.on('connection', function(socket){
       let room = data._id
       delete data._id
       console.log('chat message')
-      io.to(room).emit('chat message', data);   
+      io.to(room).emit('chat message', { message: data, _id: room });   
     });
 
     socket.on('typing', function(data) {
       console.log('typing')
-      socket.broadcast.to(data.room).emit('typing', data.username);
+      socket.broadcast.to(data.room).emit('typing', data);
     })
 
     socket.on('empty', function(data) {
       console.log('empty')
-      socket.broadcast.to(data.room).emit('empty', data);
+      socket.broadcast.to(data.room).emit('empty', data.room);
     })
 });
