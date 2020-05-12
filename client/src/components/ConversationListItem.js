@@ -10,9 +10,10 @@ export default function ConversationListItem(props) {
   }
   // const { photo, name, text } = props.data;
   let username = window.localStorage.getItem('username')
+  console.log(props.data.members)
   let name = props.data.members.reduce((acc, m) => 
                 acc + 
-                username === m.username ? "" : m.firstName + " " + m.lastName + ", ", ""
+                (username === m.username ? "" : m.firstName + " " + m.lastName + ", "), ""
             ).slice(0,-2)
   name = name === "" ? "no one" : name;
   let text = props.data.messages && props.data.messages[0] ? props.data.messages[0].message : "You have joined the chat";

@@ -62,12 +62,12 @@ io.on('connection', function(socket){
     console.log('%s sockets connected', io.engine.clientsCount);
 
     socket.on('login', username => {
-      console.log('logging in')
+      console.log('logging in', username)
       socket.join(username)
     })
 
     socket.on('new chat', function(chat) {
-      console.log('creating new chat...')
+      console.log('creating new chat...', chat.members)
       chat.members.forEach(member => {
         io.to(member.username).emit('new chat', chat)
       });

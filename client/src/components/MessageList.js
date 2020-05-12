@@ -4,7 +4,9 @@ import Toolbar from './Toolbar';
 import Message from './Message';
 import moment from 'moment';
 import MdLogOut from 'react-ionicons/lib/MdLogOut'
-
+import {
+	Redirect
+} from 'react-router-dom';
 
 // import { API_URL, checkError } from './Utilities';
 
@@ -17,10 +19,9 @@ export default class MessageList extends React.Component {
 
     this.state = {
       messages: [],
-      name: ""
+      name: "",
+      redirect: null
     }
-
-    this.logout = this.logout.bind(this)
   }
   
   componentDidMount() {
@@ -32,7 +33,9 @@ export default class MessageList extends React.Component {
   }
   
   componentDidUpdate(previousProps) {
-    document.getElementById("mcontainer").scrollIntoView(false);
+    
+    let container = document.getElementById("mcontainer")
+    if (container) container.scrollIntoView(false);
         
     if (previousProps.activeChat._id !== this.props.activeChat._id){
       console.log('hey', this.props.activeChat)
@@ -40,7 +43,7 @@ export default class MessageList extends React.Component {
       let name = !this.props.activeChat.members || this.props.activeChat.members.length === 1 ? "No One" :
                   this.props.activeChat.members.reduce((acc, m) => 
                       acc + 
-                      username === m.username ? "" : m.firstName + " " + m.lastName + ", ", ""
+                      (username === m.username ? "" : m.firstName + " " + m.lastName + ", "), ""
                   ).slice(0,-2)
       this.setState({ messages: this.props.activeChat.messages, name })
     }
@@ -70,9 +73,8 @@ export default class MessageList extends React.Component {
   }
 
   logout = () => {
-    const { history } = this.props
     window.localStorage.removeItem('username')
-    history.push('/login')
+    this.setState({ redirect: '/login' })
   }
        
   renderMessages = () => {
@@ -139,7 +141,9 @@ export default class MessageList extends React.Component {
   
 
   render() {
-    
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />
+    }
     return(
       <div className="message-list">
         <Toolbar
